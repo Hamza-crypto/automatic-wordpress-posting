@@ -1,0 +1,82 @@
+#awp_form{
+    display: flex; 
+    flex-direction: column; 
+    max-width: 80%; 
+    margin-right: auto;
+    row-gap: 20px;
+}
+#awp_form label{
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    font-weight: 600;
+    width: auto;
+    min-width: 250px;
+    color: darkslategrey;
+}
+#awp_form label input, #awp_form label textarea, #awp_form label select{
+    margin-top: 5px;
+    font-size: 16px;
+    padding: 5px 10px;
+    font-weight: 400;
+    border: 1px solid darkgrey;
+}
+#awp_form .awp_row{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+#awp_form .awp_row label:first-child{
+    max-width: 60%;
+    width: 100%;
+}
+#awp_form .awp_row_bottom{
+    display: flex;
+}
+#awp_form .awp_row_bottom input{
+    padding: 0;
+    border: 0;
+}
+#awp_form input[type="submit"]{
+    padding: 10px 20px;
+    font-size: 18px;
+    border: 0;
+    color: white;
+    background: dodgerblue;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#awp_result p{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#awp_stats .awp_stats-item{
+    display: flex;
+}
+#awp_stats .awp_stats-item progress{
+    height: 30px;
+    border-radius: 10px;
+    background-color: #4974E430;
+    width: 400px;
+    overflow: hidden;
+}
+#awp_stats .awp_stats-item progress[value]::-webkit-progress-bar{
+    background-color: #4974E430;
+}
+#awp_stats .awp_stats-item progress::-webkit-progress-value{
+    background-color: #3D6FF0;
+    border-radius: 10px;
+}
+#awp_stats .awp_stats-item progress[value]::-webkit-progress-bar{
+    border-radius: 10px;
+}
+#awp_stats .awp_stats-item div{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    column-gap: 10px;
+}
+#awp_stats h3{
+    font-weight: 600;
+}
