@@ -79,10 +79,14 @@ if (!class_exists('AWP_parse')) {
                     $awp_csv_fields = explode(':?:', $row['awp_csv_fields']);
                     $awp_finish_row = $awp_start_row + $awp_per_csv;
                     $awp_fields_count = count($awp_csv_fields);
+
+                    if($awp_start_row != 1){
+                        $awp_start_row++;
+                    }
                     $handle->seek($awp_start_row);
-                    $rows_count = 1;
+                    $rows_count = 0;
                     while (FALSE !== $data = $handle->fgetcsv()) {
-                        if ($handle->key() < $awp_finish_row && !$handle->eof()) {
+                        if ($handle->key() <= $awp_finish_row && !$handle->eof()) {
                             $awp_post_content = $row['awp_template'];
                             $awp_post_title = $row['awp_title'];
                             for ($subkey = 0; $subkey < $awp_fields_count; $subkey++) {
@@ -96,15 +100,14 @@ if (!class_exists('AWP_parse')) {
                                 'post_status' => 'publish',
                             ));
                             AWP_SQL::update_log($file_name, sprintf('count: %d  -  handle: %d   -   level: %d   -  PostID: %d   - Time:%s', $rows_count, $handle->key(),  $data[0], $post_id, date("H:i:s d/m",time())),  $wpdb);
-                            sleep(2);
+                            sleep(0.1);
                             if ($awp_term_id != "") {
                                 wp_set_object_terms($post_id, (int)$awp_term_id, 'category');
                             }
                             if ($awp_thumb > 1) {
                                 update_post_meta($post_id, '_thumbnail_id', $awp_thumb);
                             }
-                        }
-                        else{
+                        }else{
                             $current_row = $handle->key() - 1;
 
                             if($handle->eof()){
@@ -124,6 +127,7 @@ if (!class_exists('AWP_parse')) {
                             }
                             break;
                         }
+                        $rows_count++;
                         if ($rows_count == 10) {
                             $current_row = $handle->key();
 
@@ -139,7 +143,7 @@ if (!class_exists('AWP_parse')) {
                             AWP_SQL::updateData2($args, $wpdb);
                             break;
                         }
-                        $rows_count++;
+
                     }
                     return $awp_finish_row - $awp_start_row;
                 }else if($type == 'getLabels'){
