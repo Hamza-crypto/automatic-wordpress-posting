@@ -61,7 +61,7 @@ if(!class_exists('AWP')){
             );
 
             $schedules['awp_every_minute'] = array(
-                    'interval'  => 3600,
+                    'interval'  => 60,
                     'display'   => 'Every 60 seconds',
             );
 
@@ -162,7 +162,7 @@ if(!class_exists('AWP')){
                     ),
                 'awp_row'           => array(
                     'san_type'  => 'string',
-                    'value'     => 1 . '|' . $csv['awp_total_rows'],
+                    'value'     => 1 . '|' . $csv['awp_total_rows'] + 1,
                 ),
                 'awp_template'      => array(
                     'san_type'  => 'text',

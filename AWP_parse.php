@@ -38,7 +38,7 @@ if (!class_exists('AWP_parse')) {
                             'awp_csv' => $row['awp_csv'],
                             'awp_processed_today' => 0,
                             'awp_last_run' => strtotime($tomorrow),
-                            ];
+                        ];
                         AWP_SQL::updateLastRun($args, $wpdb);
                         print_r($args);
                     }
@@ -71,11 +71,11 @@ if (!class_exists('AWP_parse')) {
                     }
                     $awp_thumb = $row['awp_thumb'];
                     $awp_term_id = $row['awp_term_id'] ?? "";
-					if(isset($row['awp_per_day']) && $row['awp_per_day'] > 0 && is_numeric($row['awp_per_day'])){
-						$awp_per_csv = $row['awp_per_day'] > 5000 ? 5000 : $row['awp_per_day'];
-					}else{
-						$awp_per_csv = 10;
-					}
+                    if(isset($row['awp_per_day']) && $row['awp_per_day'] > 0 && is_numeric($row['awp_per_day'])){
+                        $awp_per_csv = $row['awp_per_day'] > 5000 ? 5000 : $row['awp_per_day'];
+                    }else{
+                        $awp_per_csv = 50;
+                    }
                     $awp_csv_fields = explode(':?:', $row['awp_csv_fields']);
                     $awp_finish_row = $awp_start_row + $awp_per_csv;
                     $awp_fields_count = count($awp_csv_fields);
@@ -86,7 +86,7 @@ if (!class_exists('AWP_parse')) {
                     $handle->seek($awp_start_row);
                     $rows_count = 0;
                     while (FALSE !== $data = $handle->fgetcsv()) {
-                        if ($handle->key() <= $awp_finish_row && !$handle->eof()) {
+                        if ($handle->key() <= $awp_finish_row) {
                             $awp_post_content = $row['awp_template'];
                             $awp_post_title = $row['awp_title'];
                             for ($subkey = 0; $subkey < $awp_fields_count; $subkey++) {
@@ -128,7 +128,8 @@ if (!class_exists('AWP_parse')) {
                             break;
                         }
                         $rows_count++;
-                        if ($rows_count == 10) {
+                        if ($rows_count == 50 || $handle->eof()) {
+
                             $current_row = $handle->key();
 
                             $args = array(
@@ -139,6 +140,12 @@ if (!class_exists('AWP_parse')) {
                             if (isset($counts)){
                                 $args['counts'] = $counts;
                             }
+
+                            if($handle->eof()){
+                                global $wpdb;
+                                AWP_SQL::removeData($file_name, $wpdb);
+                            }
+
 //                            print_r($args);
                             AWP_SQL::updateData2($args, $wpdb);
                             break;
